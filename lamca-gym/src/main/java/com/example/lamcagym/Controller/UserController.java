@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 // Annotering som definierar klassen som en REST-kontroller med en specifik bas-URL för alla dess hanterade anrop.
 @RestController
@@ -26,6 +27,7 @@ public class UserController {
     @Autowired
     UserService userService;
 
+    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     // Logger för att logga information, varningar och fel.
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
@@ -85,7 +87,7 @@ public class UserController {
         String password = loginDetails.get("password");
         User user = userService.getUserByEmail(email);
 
-        if (user != null && user.getPassword().equals(password)) {
+        if (user != null && passwordEncoder.matches(password, user.getPassword())) {
             // Loggar inloggningen
             logger.info(user.getName() + " successfully logged in");
 

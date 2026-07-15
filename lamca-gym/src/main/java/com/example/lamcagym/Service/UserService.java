@@ -4,6 +4,7 @@ import com.example.lamcagym.Repository.UserRepository;
 import com.example.lamcagym.Entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
@@ -18,10 +19,14 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
+    // Add CryptoPasswordEncoder for password hashing
+    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
     // Metod för att skapa en ny användare.
     public boolean createUser(User user) {
         try {
             // Spara den nya användaren i databasen.
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
             User newUser = userRepository.save(user);
             // Logga att användaren har skapats med sitt ID.
             logger.info("User created with ID: {}", newUser.getUserId());
