@@ -15,7 +15,7 @@
 	<name>JpaHibernateLesson</name> <!-- Namn på projektet -->
 	<description>Demo project for Spring Boot</description> <!-- Beskrivning av projektet -->
 	<properties> <!-- Definierar egenskaper för projektet, som Java-versionen -->
-		<java.version>17</java.version> <!-- Java-versionen som projektet använder -->
+		<java.version>21</java.version> <!-- Java-versionen som projektet använder -->
 	</properties>
 	<dependencies> <!-- Definierar beroenden som krävs för att bygga projektet -->
 		<dependency>
