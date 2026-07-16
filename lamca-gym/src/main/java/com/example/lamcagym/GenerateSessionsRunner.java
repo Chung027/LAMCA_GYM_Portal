@@ -64,7 +64,7 @@ public class GenerateSessionsRunner implements CommandLineRunner {
 
     // Metod för att kontrollera om sessioner redan finns för de kommande 6 månaderna
     private boolean sessionsExist() throws SQLException {
-        String checkSql = "SELECT COUNT(*) FROM Sessions WHERE date(time) BETWEEN ? AND ?";
+        String checkSql = "SELECT COUNT(*) FROM sessions WHERE date(time) BETWEEN ? AND ?";
         LocalDate sixMonthsFromNow = LocalDate.now().plusMonths(6);
         try (Connection conn = dataSource.getConnection();
              PreparedStatement stmt = conn.prepareStatement(checkSql)) {
@@ -80,8 +80,8 @@ public class GenerateSessionsRunner implements CommandLineRunner {
 
     // Metod för att lägga till en session i databasen
     private void insertEvent(Connection conn, SessionEvent event, LocalDate date) throws SQLException {
-        String checkSql = "SELECT COUNT(*) FROM Sessions WHERE session_type = ? AND DATE(time) = ? AND TIME(time) = ?";
-        String insertSql = "INSERT INTO Sessions (session_type, time, duration, capacity, instructor) VALUES (?, ?, ?, ?, ?)";
+        String checkSql = "SELECT COUNT(*) FROM sessions WHERE session_type = ? AND DATE(time) = ? AND TIME(time) = ?";
+        String insertSql = "INSERT INTO sessions (session_type, time, duration, capacity, instructor) VALUES (?, ?, ?, ?, ?)";
 
         LocalTime startTime = event.getStartTime();
         String dateTime = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(date.atTime(startTime));

@@ -146,12 +146,34 @@
 
 <script>
     document.getElementById("contactForm").addEventListener("submit", function(event){
-          event.preventDefault(); // Prevents the form from sending data
-          // Visa meddelandet
-          document.getElementById("submitMessage").innerHTML = "Message sent! Thank you for contacting us.";
-          // Rensa formuläret (valfritt)
-          document.getElementById("contactForm").reset();
-      });
+        event.preventDefault(); // Prevents the form from sending data
+        const formData = {
+            name: document.getElementById("name").value,
+            email: document.getElementById("email").value,
+            phone: document.getElementById("phone").value,
+            subject: document.getElementById("subject").value,
+            message: document.getElementById("message").value
+        };
+        
+        fetch("/contact", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(formData)
+        })
+        .then(response => {
+            if (!response.ok) throw new Error("Error in sending message");
+            return response.json();
+        })
+        .then(() => {
+            document.getElementById("submitMessage").innerHTML = "Message sent! Thank you for contacting us.";
+            document.getElementById("contactForm").reset();
+        })
+        .catch(error => {
+            document.getElementById("submitMessage").innerHTML = "Error sending message: " + error.message;
+        });
+    });
 </script>
 <script>
     document.addEventListener('DOMContentLoaded', () => {
