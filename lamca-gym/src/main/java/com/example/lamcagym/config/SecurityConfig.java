@@ -16,6 +16,6 @@ public class SecurityConfig {
             )
             .formLogin(form -> form.disable())         // stäng av Spring Securitys egen /login-sida
             .httpBasic(basic -> basic.disable());       // stäng av popup-inloggning
-        return http;
+        return http.build();
     }
 }
