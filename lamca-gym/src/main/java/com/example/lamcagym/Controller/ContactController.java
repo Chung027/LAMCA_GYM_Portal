@@ -7,6 +7,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.Map;
 @RestController
 @RequestMapping("/contact")
@@ -28,9 +29,14 @@ public class ContactController {
         message.setText("Name: " + form.get("name") + "\nEmail: " + form.get("email") + "\nMessage: " + form.get("message"));
         try {
             mailSender.send(message);
-            return ResponseEntity.ok(Map.of("status", "success"));
+            Map<String, String> response = new HashMap<>();
+            response.put("status", "success");
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
-            return ResponseEntity.status(500).body(Map.of("status", "error", "message", e.getMessage()));
+            Map<String, String> response = new HashMap<>();
+            response.put("status", "error");
+            response.put("message", e.getMessage());
+            return ResponseEntity.status(500).body(response);
         }
     } 
 }
