@@ -19,7 +19,7 @@ public class ContactController {
     @Value("${spring.mail.username}")
     private String sender;
 
-   @PostMapping("/")
+   @PostMapping
    public ResponseEntity<?> sendContactEmail(@RequestBody Map<String, String> form) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom(sender);
