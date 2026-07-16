@@ -33,6 +33,7 @@ public class ContactController {
             response.put("status", "success");
             return ResponseEntity.ok(response);
         } catch (Exception e) {
+            logger.error("Error sending email: ", e);
             Map<String, String> response = new HashMap<>();
             response.put("status", "error");
             response.put("message", e.getMessage());

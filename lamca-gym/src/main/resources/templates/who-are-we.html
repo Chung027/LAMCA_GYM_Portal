@@ -92,6 +92,7 @@
 
                 <input type="submit" value="Submit">
             </form>
+            <p id="submitMessage"></p>
         </div>
 </div>
 <!-- Whoarewe sektion slutar här -->
@@ -162,9 +163,12 @@
             },
             body: JSON.stringify(formData)
         })
-        .then(response => {
-            if (!response.ok) throw new Error("Error in sending message");
-            return response.json();
+        .then(async response => {
+            const data = await response.json();
+            if (!response.ok) {
+                throw new Error(data.message || "Error sending message");
+            }
+            return data;
         })
         .then(() => {
             document.getElementById("submitMessage").innerHTML = "Message sent! Thank you for contacting us.";
