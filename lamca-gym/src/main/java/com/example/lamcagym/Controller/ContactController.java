@@ -20,7 +20,7 @@ public class ContactController {
     private String sender;
 
    @PostMapping("/")
-   public ResponseEntity<String> sendContactEmail(@RequestBody Map<String, String> form) {
+   public ResponseEntity<?> sendContactEmail(@RequestBody Map<String, String> form) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom(sender);
         message.setTo(recipient);
