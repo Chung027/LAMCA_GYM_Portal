@@ -6,7 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.bind.annotation.*;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.util.HashMap;
 import java.util.Map;
 @RestController
@@ -19,6 +20,7 @@ public class ContactController {
     @Value("${spring.mail.username}")
     private String sender;
 
+    private static final Logger logger = LoggerFactory.getLogger(ContactController.class);
    @PostMapping
    public ResponseEntity<?> sendContactEmail(@RequestBody Map<String, String> form) {
         SimpleMailMessage message = new SimpleMailMessage();
