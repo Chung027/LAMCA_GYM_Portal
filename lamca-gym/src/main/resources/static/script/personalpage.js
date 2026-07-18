@@ -131,6 +131,8 @@ function bookSession(sessionId) {
     .then(data => {
         if (data.status === 'success') {
             alert(data.message);
+            document.getElementById('eventModal').style.display = 'none'; // Close the modal after booking
+            calendar.refetchEvents(); // Refresh the calendar to show updated booking status
             // Uppdatera antalet bokade platser lokalt
             const event = calendar.getEventById(sessionId);
             event.setExtendedProp('booked', event.extendedProps.booked + 1);
@@ -156,6 +158,7 @@ function bookSession(sessionId) {
         .then(response => {
             if (response.ok) {
                 alert('Session cancelled.');
+                document.getElementById('eventModal').style.display = 'none'; // Stäng modalen efter avbokning
                 calendar.refetchEvents();
             } else {
                 throw new Error('Failed to cancel booking.');
