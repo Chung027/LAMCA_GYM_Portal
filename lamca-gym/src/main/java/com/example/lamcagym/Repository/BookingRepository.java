@@ -13,4 +13,7 @@ public interface BookingRepository extends JpaRepository<Booking, Integer> {
 
     // Funktion för att räkna antalet bokningar för en viss session baserat på sessionens id
     int countBySession_SessionId(Integer sessionId);
+    
+    // Funktion för att kontrollera om en bokning existerar baserat på sessionens id och användarens id
+    boolean existsBySession_SessionIdAndUser_UserId(Integer sessionId, Integer userId);
 }

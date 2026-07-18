@@ -39,6 +39,10 @@ public class SessionController {
         for (Session session : sessions) {
             int bookedCount = bookingService.countBookingsBySession(session.getSessionId());
             session.setBooked(bookedCount);
+            // kontrollera om userID inte är null innan du kallar hasUserBookedSession
+            if (userId != null) {
+                session.setUserBooked(bookingService.hasUserBookedSession(session.getSessionId(), userId));
+            }
         }
         return sessions;
     }

@@ -21,14 +21,15 @@ public class ContactController {
     private String sender;
 
     private static final Logger logger = LoggerFactory.getLogger(ContactController.class);
+
    @PostMapping
    public ResponseEntity<?> sendContactEmail(@RequestBody Map<String, String> form) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom(sender);
         message.setTo(recipient);
         message.setReplyTo(form.get("email"));
-        message.setSubject("Contact Form Submission from " + form.get("name"));
-        message.setText("Name: " + form.get("name") + "\nEmail: " + form.get("email") + "\nMessage: " + form.get("message"));
+        message.setSubject(form.get("subject") + " - " + form.get("name"));
+        message.setText("Name: " + form.get("name") + "\nEmail: " + form.get("email") + "\nMessage from customer: " + form.get("message"));
         try {
             mailSender.send(message);
             Map<String, String> response = new HashMap<>();

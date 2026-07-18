@@ -119,4 +119,7 @@ public class BookingService {
             return false;
         }
     }
+    public boolean hasUserBookedSession(Integer sessionId, Integer userId) {
+        return bookingRepository.existsBySession_SessionIdAndUser_UserId(sessionId, userId);
+    }
 }

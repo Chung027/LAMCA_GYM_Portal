@@ -2,6 +2,8 @@ package com.example.lamcagym.Entity;
 
 // Importera nödvändiga bibliotek och moduler
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -49,6 +51,10 @@ public class Session {
     private List<Calendar> calendars; // Lista över kalendrar kopplade till sessionen
     @Transient // För att inte persistensfältet i databasen
     private Integer booked;
+
+    @Transient
+    @JsonProperty("isUserBooked")
+    private boolean userBooked; // Flagga för att indikera om användaren har bokat sessionen
 
     // Extra konstruktor som är användbar vid skapandet av en ny session
     public Session(String sessionType, Date time, Integer duration, Integer capacity, String instructor) {

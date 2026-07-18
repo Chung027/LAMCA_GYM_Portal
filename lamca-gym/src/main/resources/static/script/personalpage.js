@@ -91,27 +91,28 @@
  });
 
  function fetchEvents(fetchInfo, successCallback, failureCallback) {
-     fetch('/sessions/all')
-         .then(response => response.json())
-         .then(sessions => {
-             const events = sessions.map(session => {
-                 return {
-                     id: session.sessionId,
-                     title: session.sessionType,
-                     start: session.time,
-                     end: calculateEndTime(session.time, session.duration),
-                     instructor: session.instructor,
-                     capacity: session.capacity,
-                     booked: session.booked,
-                     isUserBooked: session.isUserBooked
-                 };
-             });
-             successCallback(events);
-         })
-         .catch(error => {
-             console.error('Error fetching sessions:', error);
-             failureCallback(error);
-         });
+    const userId = localStorage.getItem('userId'); // Hämta userId från localStorage
+    fetch(`/sessions/all?userId=${userId}`)
+        .then(response => response.json())
+        .then(sessions => {
+            const events = sessions.map(session => {
+                return {
+                    id: session.sessionId,
+                    title: session.sessionType,
+                    start: session.time,
+                    end: calculateEndTime(session.time, session.duration),
+                    instructor: session.instructor,
+                    capacity: session.capacity,
+                    booked: session.booked,
+                    isUserBooked: session.isUserBooked
+                };
+            });
+            successCallback(events);
+        })
+        .catch(error => {
+            console.error('Error fetching sessions:', error);
+            failureCallback(error);
+        });
  }
 
 function bookSession(sessionId) {
