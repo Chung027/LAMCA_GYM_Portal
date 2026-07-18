@@ -26,8 +26,8 @@
              cancelBtn.setAttribute('data-sessionid', currentEvent.id);
              bookBtn.onclick = () => bookSession(currentEvent.id);
              cancelBtn.onclick = () => cancelBooking(currentEvent.id,userId);
-             bookBtn.style.display = currentEvent.extendedProps.isBooked ? 'none' : 'inline-block';
-             cancelBtn.style.display = currentEvent.extendedProps.isBooked ? 'inline-block':'none';
+             bookBtn.style.display = currentEvent.extendedProps.isUserBooked ? 'none' : 'inline-block';
+             cancelBtn.style.display = currentEvent.extendedProps.isUserBooked ? 'inline-block':'none';
              document.getElementById('eventModal').style.display = 'block';
              document.querySelector('.close').addEventListener('click', function() {
              document.getElementById('eventModal').style.display = 'none';
