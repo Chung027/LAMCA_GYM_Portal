@@ -45,6 +45,10 @@ public class BookingService {
         if (user == null || session == null) {
             return ResponseEntity.badRequest().body(new ResponseObject("error", "User or session doesn't exist.", null));
         }
+        // Kontrollera om användaren redan har bokat sessionen
+        if (bookingRepository.existsBySession_SessionIdAndUser_UserId(session.getSessionId(), user.getUserId())) {
+            return ResponseEntity.badRequest().body(new ResponseObject("error", "You have already booked this session.", null));
+        }
 
         Booking booking = new Booking(user, session, new Date()); // Använd det hämtade Session-objektet
         Booking savedBooking = bookingRepository.save(booking);
