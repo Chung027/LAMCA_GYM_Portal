@@ -133,12 +133,6 @@ function bookSession(sessionId) {
             alert(data.message);
             document.getElementById('eventModal').style.display = 'none'; // Close the modal after booking
             calendar.refetchEvents(); // Refresh the calendar to show updated booking status
-            // Uppdatera antalet bokade platser lokalt
-            const event = calendar.getEventById(sessionId);
-            event.setExtendedProp('booked', event.extendedProps.booked + 1);
-            event.setExtendedProp('isUserBooked', true);
-            calendar.addEvent(event);
-            calendar.render();
         } else {
             throw new Error(data.message || 'An error occurred.');
         }
