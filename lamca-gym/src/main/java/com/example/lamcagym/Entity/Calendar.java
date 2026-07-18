@@ -18,6 +18,7 @@ public class Calendar {
 
     @Id // Märker detta fält som primärnyckel
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Anger att ID ska genereras automatiskt av databasen
+    @Column(name = "calendar_id")
     private Integer calendarId; // Unikt ID för varje kalenderpost
 
     @Column(name = "booking_time") // Anger kolumnnamnet i databasen och att detta fält representerar bokningstiden

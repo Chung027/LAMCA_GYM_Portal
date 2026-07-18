@@ -32,7 +32,7 @@ public class SessionController {
     }
 
     @GetMapping("/all")
-    public List<Session> getAllSessions() {
+    public List<Session> getAllSessions(@RequestParam(required = false) Integer userId) {
         logger.info("Fetching all sessions from the database.");
         List<Session> sessions = sessionService.getAll();
         // Hämta och sätt antalet bokningar för varje session

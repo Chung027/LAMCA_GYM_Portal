@@ -2,6 +2,7 @@ package com.example.lamcagym.Entity;
 
 // Importera nödvändiga bibliotek och moduler
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import jakarta.persistence.*;
