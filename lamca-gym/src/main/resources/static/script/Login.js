@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Hantera "Forgot Password" klick
-    document.getElementById('forgotPassword').addEventListener('click', function() {§
+    document.getElementById('forgotPassword').addEventListener('click', function() {
         const email = prompt("Enter your email address to reset your password:");
         if (!email) return; // Om användaren avbryter prompten, gör inget
 
