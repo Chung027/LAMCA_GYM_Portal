@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Hantera "Forgot Password" klick
-    document.getElementById('forgotPassword').addEventListener('click', function() {
+    document.getElementById('forgotPassword').addEventListener('click', function() {§
         const email = prompt("Enter your email address to reset your password:");
         if (!email) return; // Om användaren avbryter prompten, gör inget
 
@@ -28,11 +28,12 @@ document.addEventListener('DOMContentLoaded', function() {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ email })
+            body: JSON.stringify({email})
         })
-        .then(response => response.json())
-        .then(data => alert(data.message))
-        .catch(() => alert('Something went wrong'));
+            .then(response => response.json())
+            .then(data => alert(data.message))
+            .catch(() => alert('Something went wrong'));
+    });
 });
 
 function loginUser(email, password) {

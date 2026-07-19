@@ -214,7 +214,7 @@ public class UserController {
         userService.updateUser(user); // Spara användaren med den nya token och utgångstid
         
         // Skapa återställningslänk
-        String resetLink = "http://localhost:8080/user/reset-password.html?token=" + token;
+        String resetLink = "http://localhost:8080/reset-password.html?token=" + token;
 
         // Skicka e-post med återställningslänken
         SimpleMailMessage message = new SimpleMailMessage();
