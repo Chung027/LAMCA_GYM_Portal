@@ -17,6 +17,22 @@ document.addEventListener('DOMContentLoaded', function() {
         const password = document.getElementById('loginPassword').value;
         loginUser(email, password);
     });
+
+    // Hantera "Forgot Password" klick
+    document.getElementById('forgotPassword').addEventListener('click', function() {
+        const email = prompt("Enter your email address to reset your password:");
+        if (!email) return; // Om användaren avbryter prompten, gör inget
+
+        fetch('/user/forgot-password', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email })
+        })
+        .then(response => response.json())
+        .then(data => alert(data.message))
+        .catch(() => alert('Something went wrong'));
 });
 
 function loginUser(email, password) {

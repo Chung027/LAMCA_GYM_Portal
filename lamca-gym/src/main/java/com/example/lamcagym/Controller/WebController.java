@@ -63,4 +63,10 @@ public class WebController {
         return "Login";
     }
 
+    // Request mapping för återställning av lösenord
+    @GetMapping("/reset-password.html")
+    public String resetPasswordPage(){
+        return "reset-password";
+    }
+    
 }
