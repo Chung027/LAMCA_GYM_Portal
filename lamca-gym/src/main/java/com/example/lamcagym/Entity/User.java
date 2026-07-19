@@ -9,7 +9,7 @@ import lombok.AllArgsConstructor;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -53,6 +53,14 @@ public class User {
     @OneToOne(mappedBy = "user", fetch = FetchType.LAZY) // En-till-en-relation till användarens kalender, laddas "late"
     @JsonIgnore // Ignorera detta fält i JSON-svar
     private Calendar calendar; // Användarens kalender
+
+    @Column(name = "reset_token")
+    @JsonIgnore
+    private String resetToken;
+
+    @Column(name = "reset_token_expiry")
+    @JsonIgnore
+    private LocalDateTime resetTokenExpiry;
 
     // Extra konstruktor som är användbar vid skapandet av en ny användare
     public User(String name, String email, String phoneNumber, String password) {

@@ -19,6 +19,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.beans.factory.annotation.Value;
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 // Annotering som definierar klassen som en REST-kontroller med en specifik bas-URL för alla dess hanterade anrop.
 @RestController
@@ -26,11 +31,14 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 public class UserController {
     @Autowired
     UserService userService;
+    @Autowired
+    private JavaMailSender mailSender;
+    @Value("${spring.mail.username}")
+    private String sender;
 
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     // Logger för att logga information, varningar och fel.
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
-
 
     // Konstruktor som injicerar en instans av UserService.
     public UserController(UserService userService) {
@@ -188,5 +196,64 @@ public class UserController {
         // Loggar och returnerar ett felmeddelande om användaren inte kunde hittas
         logger.warn("User with ID: {} not found.", id);
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User with ID: " + id + " not found.");
+    }
+
+    // Hantera POST-förfrågningar för att återställa lösenordet
+    @PostMapping("/forgot-password")
+    public ResponseEntity<?> forgotPassword(@RequestBody Map<String, String> request) {
+        String email = request.get("email");
+        User user = userService.getUserByEmail(email);
+        if (user == null) {
+            logger.warn("Password reset requested for non-existent email: {}", email);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User with email " + email + " not found.");
+        }
+        // Generera en unik token och sätt en utgångstid för token
+        String token = UUID.randomUUID().toString();  // Random token
+        user.setResetToken(token); // Sätt token i användarobjektet
+        user.setResetTokenExpiry(LocalDateTime.now().plusMinutes(15)); // Token giltig i 15 minuter
+        userService.updateUser(user); // Spara användaren med den nya token och utgångstid
+        
+        // Skapa återställningslänk
+        String resetLink = "http://localhost:8080/user/reset-password.html?token=" + token;
+
+        // Skicka e-post med återställningslänken
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom(sender);
+        message.setTo(user.getEmail());
+        message.setSubject("Reset Your password");
+        message.setText("Click the following link to reset your password (Valid for 15 minutes): " + resetLink);
+        mailSender.send(message);
+        logger.info("Password reset email sent to: {}", user.getEmail());
+
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Password reset email sent to: " + user.getEmail());
+        return ResponseEntity.ok(response);
+    }
+
+        // Hantera POST-förfrågningar för att återställa lösenordet med token
+        @PostMapping("/reset-password")
+        public ResponseEntity<?> resetPassword(@RequestBody Map<String, String> request) {
+            String token = request.get("token");
+            String newPassword = request.get("newPassword");
+            User user = userService.getUserByResetToken(token);
+            if (user == null
+                || user.getResetTokenExpiry() == null
+                || user.getResetTokenExpiry().isBefore(LocalDateTime.now())) {
+                    logger.warn("Invalid or expired password reset token used: {}", token);
+                    Map<String, String> response = new HashMap<>();
+                    response.put("message", "Invalid or expired token.");
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+                }
+
+            // Uppdatera användarens lösenord och rensa token och utgångstid
+            user.setPassword(passwordEncoder.encode(newPassword));
+            user.setResetToken(null);
+            user.setResetTokenExpiry(null);
+            userService.updateUser(user);
+            logger.info("Password successfully reset for user: {}", user.getEmail());
+            
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "Password successfully reset.");
+            return ResponseEntity.ok(response);
     }
 }

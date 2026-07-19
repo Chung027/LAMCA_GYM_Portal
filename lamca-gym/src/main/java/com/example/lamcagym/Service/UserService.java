@@ -108,4 +108,16 @@ public class UserService {
     public ArrayList<User> getAll() {
         return (ArrayList<User>) userRepository.findAll();
     }
+
+    // Metod för att hämta en användare baserat på dess återställningstoken.
+    public User getUserByResetToken(String resetToken) {
+        // Kontrollera om resetToken är null eller tomt
+        if (resetToken == null || resetToken.isEmpty()) {
+            logger.warn("Reset token is null or empty.");
+            return null;
+        }
+        // Hämta användaren baserat på resetToken
+        logger.info("Fetching user with reset token: {}", resetToken);
+        return userRepository.findByResetToken(resetToken);
+    }
 }

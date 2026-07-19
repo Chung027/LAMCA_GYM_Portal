@@ -12,4 +12,8 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     // Metod för att hitta en användare baserat på dess e-postadress
     User findByEmail(String email);
+
+    // Metod för att hitta en användare lösenord baserat på dess återställningstoken
+    User findByResetToken(String resetToken);
+    
 }
