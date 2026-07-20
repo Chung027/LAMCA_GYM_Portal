@@ -31,6 +31,5 @@ build/
 
 ### VS Code ###
 .vscode/
-/lamca-gym/.env
+.env
 /logs/
-/lamca-gym/logs/
