@@ -16,6 +16,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.validation.FieldError;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
+import org.apache.catalina.connector.ClientAbortException;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -76,16 +77,19 @@ public class GlobalExceptionHandler {
     // Exception handlers som fångar och hanterar olika typer av undantag
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiError> handleValidationExceptions(MethodArgumentNotValidException ex, HttpServletRequest request) {
+        log.debug("Handling MethodArgumentNotValidException for request: {}", request.getRequestURI());
         return buildErrorResponse(ex, HttpStatus.BAD_REQUEST, request.getRequestURI());
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<ApiError> handleConstraintViolationException(ConstraintViolationException e, HttpServletRequest request) {
+        log.debug("Handling ConstraintViolationException for request: {}", request.getRequestURI());
         return buildErrorResponse(e, HttpStatus.BAD_REQUEST, request.getRequestURI());
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ApiError> handleIllegalArgumentException(IllegalArgumentException ex, HttpServletRequest request) {
+        log.debug("Handling IllegalArgumentException for request: {}", request.getRequestURI());
         return buildErrorResponse(ex, HttpStatus.BAD_REQUEST, request.getRequestURI());
     }
 
@@ -96,8 +100,16 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiError> handleAllExceptions(Exception ex, HttpServletRequest request) {
+        log.debug("Handling Exception for request: {}", request.getRequestURI());
         return buildErrorResponse(ex, HttpStatus.INTERNAL_SERVER_ERROR, request.getRequestURI());
     }
+
+    @ExceptionHandler(ClientAbortException.class)
+    public void handleClientAbortException(ClientAbortException ex) {
+        // Logga ett meddelande om att klienten avbröt anslutningen.
+        log.debug("Client aborted the connection: {}", ex.getMessage());
+    }
+
 }
 
 
